@@ -1,0 +1,24 @@
+{
+  "name": "Google Next Results Page",
+  "description": "When on a Google search page, open next results page",
+  "version": "1.0",
+  "permissions": [
+    "activeTab"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "Next results page",
+    "default_icon": "arrow-right-c.png"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Right"
+      }
+    }
+  },
+  "manifest_version": 2
+}
