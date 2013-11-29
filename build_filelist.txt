@@ -1,0 +1,6 @@
+arrow-left-c.png
+arrow-right-c.png
+background.js
+build.bat
+forward.png
+manifest.json
