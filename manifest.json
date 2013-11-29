@@ -1,6 +1,6 @@
 {
-  "name": "Google Next Results Page",
-  "description": "When on a Google search page, open next results page",
+  "name": "Show Next Results Page on Google Search™",
+  "description": "When on a Google Search™ search page, show next results page",
   "version": "1.0",
   "permissions": [
     "activeTab"
