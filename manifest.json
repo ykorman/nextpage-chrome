@@ -4,7 +4,8 @@
   "version": "1.1",
   "short_name": "Show next results page",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "icons": {
     "128": "forward.png"

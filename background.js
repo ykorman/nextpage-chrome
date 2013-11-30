@@ -9,5 +9,8 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 
 // register the page action on all pages
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  chrome.pageAction.show(tabId);
+  gs = /https?:\/\/www\.google\.com\/.*/
+  if (gs.test(tab.url)) {
+    chrome.pageAction.show(tabId);
+  }  
 });
