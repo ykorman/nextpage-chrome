@@ -7,10 +7,9 @@ chrome.pageAction.onClicked.addListener(function(tab) {
   });
 });
 
-// register the page action on all pages
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  gs = /https?:\/\/www\.google\.com\/.*/
-  if (gs.test(tab.url)) {
-    chrome.pageAction.show(tabId);
-  }  
+// Listen for the content script (element_searcher.js) to send a message to the
+// background page.
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  console.log("got message " + request);
+  chrome.pageAction.show(sender.tab.id);
 });

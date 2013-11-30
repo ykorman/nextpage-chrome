@@ -25,5 +25,16 @@
       }
     }
   },
+  "content_scripts" : [
+    {
+      "matches" : [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js" : ["element_searcher.js"],
+      "run_at" : "document_idle",
+      "all_frames" : false
+    }
+  ],
   "manifest_version": 2
 }
