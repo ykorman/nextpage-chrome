@@ -1,6 +1,6 @@
 arrow-left-c.png
 arrow-right-c.png
 background.js
-build.bat
+element_searcher.js
 forward.png
 manifest.json
