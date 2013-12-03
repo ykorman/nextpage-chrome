@@ -1,7 +1,7 @@
 {
   "name": "NextPage",
   "description": "Open next page in article/results page/forum",
-  "version": "1.2",
+  "version": "1.3",
   "short_name": "Show next page",
   "permissions": [
     "activeTab",
