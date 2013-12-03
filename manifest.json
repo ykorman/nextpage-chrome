@@ -19,7 +19,8 @@
     "default_icon": "arrow-right-c.png"
   },
   "commands": {
-    "_execute_page_action": {
+    "open-next-page": {
+      "description": "Open Next Page",
       "suggested_key": {
         "default": "Ctrl+Right"
       }
