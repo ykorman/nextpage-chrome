@@ -1,8 +1,8 @@
 {
-  "name": "Show Next Results Page on Google Search™",
-  "description": "When on a Google Search™ search page, show next results page",
+  "name": "NextPage",
+  "description": "Open next page in article/results page/forum",
   "version": "1.2",
-  "short_name": "Show next results page",
+  "short_name": "Show next page",
   "permissions": [
     "activeTab",
     "tabs"
@@ -15,7 +15,7 @@
     "persistent": false
   },
   "page_action": {
-    "default_title": "Next results page",
+    "default_title": "Next page",
     "default_icon": "arrow-right-c.png"
   },
   "commands": {
