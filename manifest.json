@@ -1,7 +1,7 @@
 {
   "name": "Show Next Results Page on Google Search™",
   "description": "When on a Google Search™ search page, show next results page",
-  "version": "1.1",
+  "version": "1.2",
   "short_name": "Show next results page",
   "permissions": [
     "activeTab",
