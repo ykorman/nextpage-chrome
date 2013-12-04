@@ -14,10 +14,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
-function clickOnElementByQuery(query) {
-  chrome.tabs.executeScript(
-    {code: 'document.querySelector("' + query + '").click();'}
-  );
+function injectedCallback(results) {
+  // TODO handle results
+}
+
+function clickOnElementByQuery(query) { 
+  // TODO move injected code to separate file, use file: instead of code:
+  chrome.tabs.executeScript(null,
+    {code: 'document.querySelector("' + query + '").click();'},
+    injectedCallback);
 }
 
 // shortcut commands
