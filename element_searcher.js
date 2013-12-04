@@ -2,8 +2,12 @@
 
   var selector = {};
   
-  selector["google_search"] = "#pnnext";
-  selector["arstechnica"] = "span.next";
+  selector["google_search"]   = "#pnnext";
+  selector["arstechnica"]     = "span.next";
+  selector["pcmag"]           = "a.next-btn";
+  // TODO hacker news
+  // TODO blogspot
+  // TODO wordpress
   
   // keep always as last
   // in arstechnica this one moves to the next article, and the
