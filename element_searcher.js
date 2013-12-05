@@ -5,9 +5,9 @@
   selector["google_search"]   = "#pnnext";
   selector["arstechnica"]     = "span.next";
   selector["pcmag"]           = "a.next-btn";
-  // TODO hacker news
-  // TODO blogspot
-  // TODO wordpress
+  selector["blogspot"]        = "a.blog-pager-older-link";
+  selector["wordpress"]       = "div.navigation a";
+  //selector["tumblr"]          = "#next a"; ??
   
   // keep always as last
   // in arstechnica this one moves to the next article, and the
