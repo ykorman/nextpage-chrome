@@ -8,6 +8,11 @@ You can use a keyboard shortcut - Ctrl+Right (right arrow).
 ## Supported Sites
 * Google search (www.google.com)
 * Ars Technica (www.arstechnica.com)
+* pcmag
+* blogspot
+* wordpress
+* digitaltrends
+* tumblr
 
 ## Install
 Install the extension using 'Developer mode' in the extensions page.

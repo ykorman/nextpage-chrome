@@ -7,7 +7,8 @@
   selector["pcmag"]           = "a.next-btn";
   selector["blogspot"]        = "a.blog-pager-older-link";
   selector["wordpress"]       = "div.navigation a";
-  //selector["tumblr"]          = "#next a"; ??
+  selector["digitaltrends"]   = "a.next";
+  selector["tumblr"]          = "ul.pagination li.older a";
   
   // keep always as last
   // in arstechnica this one moves to the next article, and the
