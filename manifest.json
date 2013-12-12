@@ -1,8 +1,8 @@
 {
-  "name": "NextPage",
-  "description": "Open next page in article/results page/forum",
+  "name": "Quicken",
+  "description": "Surf faster than your mouse can handle",
   "version": "1.4",
-  "short_name": "Show next page",
+  "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "activeTab",
     "tabs"
@@ -15,7 +15,7 @@
     "persistent": false
   },
   "page_action": {
-    "default_title": "Next page",
+    "default_title": "Next",
     "default_icon": "arrow-right-c.png"
   },
   "commands": {

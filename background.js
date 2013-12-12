@@ -8,6 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (sender.tab != undefined)
           chrome.pageAction.hide(sender.tab.id);
   } else {
+    console.log("got identification of " + request);
     if (sender.tab != undefined)
       chrome.pageAction.show(sender.tab.id);
     nextCommandQuery = request;
@@ -16,6 +17,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 function injectedCallback(results) {
   // TODO handle results
+  // console.log("got result back: " + results);
 }
 
 function clickOnElementByQuery(query) { 
