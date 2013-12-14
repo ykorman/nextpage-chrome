@@ -1,6 +1,4 @@
-arrow-left-c.png
-arrow-right-c.png
+quicken2.png
 background.js
 element_searcher.js
-forward.png
 manifest.json
