@@ -1,14 +1,14 @@
 {
   "name": "Quicken",
   "description": "Surf faster than your mouse can handle",
-  "version": "1.4",
+  "version": "1.5",
   "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "activeTab",
     "tabs"
   ],
   "icons": {
-    "128": "forward.png"
+    "512": "Quicken2.png"
   },
   "background": {
     "scripts": ["background.js"],
@@ -16,7 +16,7 @@
   },
   "page_action": {
     "default_title": "Next",
-    "default_icon": "arrow-right-c.png"
+    "default_icon": "Quicken2.png"
   },
   "commands": {
     "open-next-page": {
