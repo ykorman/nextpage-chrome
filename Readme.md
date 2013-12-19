@@ -20,5 +20,12 @@ Install the extension using 'Developer mode' in the extensions page.
 After enabling the 'Developer mode', select 'Load unpacked extension...' and 
 select the directory where you've saved the files.
 
-## Notes
-Thanks to ionicons.com for the icons.
+# TODO
+* Add Ctrl+Left as shortcut to back button
+* add support for: 
+* move spinner in sites?
+* add page transition animation
+* add xpath support for other sites i can't support today
+* when you have option for going forward or backwards (like in ars, you can go
+  to newer story or older) support the ctrl+back button for newer
+* bug: the debug of click result is always empty
