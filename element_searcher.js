@@ -20,14 +20,24 @@
   selector["bing_search"]     = "a.sb_pagN";
   selector["youtube_search"]  = "a[data-link-type~=next]";
   selector["youtube_plylist"] = "a[title~=Next]";
+  selector["aliexpress"]      = "a.page-next";
+  selector["ars_older"]       = "div.older > a";
+  selector["rhn_docs"]        = ".next > a";
+  selector["tldp"]            = "a[accesskey=N]";
+  selector["drdobbs"]         = "div.nav1 > center> a:nth-last-child(1)";
+  selector["mail_archives"]   = "tbody > tr > td[align=right] > a";
+  selector["instagram_blog"]  = "li.paging-older > a";
+  selector["scnsrc_me"]       = "a.nextpostslink";
+  selector["rlslog_net"]      = "div#content > p a:nth-last-child(1)";
+  selector["rlsdd_com"]       = "div.nav-previous > a";
 
   
   // keep these always last
   // in some sites these move to the next article, and the
   // more specific above move to next page (if exists)
-  selector["html_rel_a"]      = "a[rel~=next]";
-  selector["html_rel_link"]   = "link[rel~=next]";
-  selector["html_rel_area"]   = "area[rel~=next]";
+  selector["html_rel_a"]      = "body a[rel~=next]";
+  selector["html_rel_link"]   = "body link[rel~=next]";
+  selector["html_rel_area"]   = "body area[rel~=next]";
   
   var found = false;
   
