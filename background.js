@@ -1,23 +1,23 @@
-var nextCommandQuery = "";
+var nextCommandQueryMap = {};
 
 // Listen for the content script (element_searcher.js) to send a message to the
 // background page.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request === "none") {
-    nextCommandQuery = "";
+    nextCommandQueryMap[sender.tab.id] = "";
     if (sender.tab != undefined)
           chrome.pageAction.hide(sender.tab.id);
   } else {
     console.log("got identification of " + request);
     if (sender.tab != undefined)
       chrome.pageAction.show(sender.tab.id);
-    nextCommandQuery = request;
+    nextCommandQueryMap[sender.tab.id] = request;
   }
 });
 
 function injectedCallback(results) {
   // TODO handle results
-  // console.log("got result back: " + results);
+  console.log("got result back: " + results);
 }
 
 function clickOnElementByQuery(query) { 
@@ -29,12 +29,14 @@ function clickOnElementByQuery(query) {
 
 // shortcut commands
 chrome.commands.onCommand.addListener(function(command) {
-  if (nextCommandQuery !== "")
-    clickOnElementByQuery(nextCommandQuery);
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    var current = tabs[0];
+    clickOnElementByQuery(nextCommandQueryMap[current.id]);
+  });
 });
 
 // Called when the user clicks on the page action.
 chrome.pageAction.onClicked.addListener(function(tab) {
   if (nextCommandQuery !== "")
-    clickOnElementByQuery(nextCommandQuery);
+    clickOnElementByQuery(nextCommandQueryMap[tab.id]);
 });
