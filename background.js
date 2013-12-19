@@ -29,10 +29,15 @@ function clickOnElementByQuery(query) {
 
 // shortcut commands
 chrome.commands.onCommand.addListener(function(command) {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var current = tabs[0];
-    clickOnElementByQuery(nextCommandQueryMap[current.id]);
-  });
+  console.log("got command " + command);
+  if (command == "open-next-page") {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      var current = tabs[0];
+      clickOnElementByQuery(nextCommandQueryMap[current.id]);
+    });
+  } else if (command == "open-prev-page") {
+    chrome.tabs.executeScript(null, {code: 'history.back();'});
+  }
 });
 
 // Called when the user clicks on the page action.

@@ -24,6 +24,12 @@
       "suggested_key": {
         "default": "Ctrl+Right"
       }
+    },
+    "open-prev-page": {
+      "description": "Open Previous Page",
+      "suggested_key": {
+        "default": "Ctrl+Left"
+        }
     }
   },
   "content_scripts" : [
