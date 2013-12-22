@@ -42,6 +42,6 @@ chrome.commands.onCommand.addListener(function(command) {
 
 // Called when the user clicks on the page action.
 chrome.pageAction.onClicked.addListener(function(tab) {
-  if (nextCommandQuery !== "")
+  if (nextCommandQueryMap[tab.id] !== "")
     clickOnElementByQuery(nextCommandQueryMap[tab.id]);
 });
