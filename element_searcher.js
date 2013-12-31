@@ -1,4 +1,4 @@
-(function () {
+(function () {   // namespace protection
 
   var selector = {};
   
@@ -30,7 +30,9 @@
   selector["scnsrc_me"]       = "a.nextpostslink";
   selector["rlslog_net"]      = "div#content > p a:nth-last-child(1)";
   selector["rlsdd_com"]       = "div.nav-previous > a";
-
+  selector["django"]          = "div.right > a";
+  selector["piratebay"]       = "a > img[alt=Next]";
+  selector["imdb_search"]     = "div.leftright > div#right > span.pagination > a:nth-last-child(1)";
   
   // keep these always last
   // in some sites these move to the next article, and the
@@ -55,4 +57,4 @@
   if (!found)
     chrome.runtime.sendMessage("none");
   
-})();
+})();  // namespace protection end
