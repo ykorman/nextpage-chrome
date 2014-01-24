@@ -1,4 +1,5 @@
 quicken2.png
 background.js
 element_searcher.js
+executer.js
 manifest.json
