@@ -46,7 +46,9 @@
   for (site in selector) {
     if (selector.hasOwnProperty(site)) {
       var query = selector[site];
-      if (document.querySelector(query) !== null) {
+      var nextLinkElement = document.querySelector(query);
+      if ((nextLinkElement !== null) &&
+          (nextLinkElement.click !== null )) {
         found = true;
         chrome.runtime.sendMessage(query);
         break;
