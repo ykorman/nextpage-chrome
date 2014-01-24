@@ -28,8 +28,11 @@
     } else {
       console.log("got identification of \'" + request + 
                   "\' for tab " + sender.tab.id);
-      if (sender.tab !== undefined)
+      // only show the icon if wasn't already shown
+      if ((sender.tab !== undefined) &&
+          (nextCommandQueryMap[sender.tab.id] !== "")) {
         chrome.pageAction.show(sender.tab.id);
+      }
       nextCommandQueryMap[sender.tab.id] = request;
     }
   });
