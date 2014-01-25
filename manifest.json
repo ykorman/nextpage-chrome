@@ -1,7 +1,7 @@
 {
   "name": "Quicken",
   "description": "Surf faster than your mouse can handle",
-  "version": "1.9",
+  "version": "1.10",
   "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "activeTab",
