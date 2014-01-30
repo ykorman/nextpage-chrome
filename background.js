@@ -5,8 +5,10 @@
   // Listen for the content script (element_searcher.js) for query registration
   // and listen for the excuter script (executer.js) for query requests
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    
     // if the request comes from the executer, send him the element to click on
-    console.log("got request: " + JSON.stringify(request));
+    //console.log("got request: " + JSON.stringify(request));
+    
     if (request.type === "executer") {
       if ((sender.tab !== undefined) && 
           (sender.tab.id in nextCommandQueryMap)) {
@@ -21,7 +23,9 @@
     if (request.type === "none") {
       // TODO something is wrong here, I should simply remove the entry in the
       // Map and hide the tab
-      if ((sender.tab !== undefined) && (sender.tab.id in nextCommandQueryMap)) {
+      if ((sender.tab !== undefined) && 
+          (sender.tab.id in nextCommandQueryMap) &&
+          (nextCommandQueryMap[sender.tab.id] !== undefined)) {
         console.log("got null request for tab " + sender.tab.id + 
                     " which previously held " + 
                     JSON.stringify(nextCommandQueryMap[sender.tab.id])); 
@@ -34,14 +38,24 @@
     if ((request.type === "query") ||
         (request.type === "url")) 
     {
+      if ((sender.tab === undefined) ||
+          (sender.tab.id === undefined)) {
+        console.log("got request but no tab id");
+        return false;
+      }
+      
+      if (nextCommandQueryMap[sender.tab.id] === request) {
+        // already enabled
+        return false;
+      }
+      
       console.log("got identification of type " + request.type + 
                   " for tab " + sender.tab.id);
-      // only show the icon if wasn't already shown
-      if ((sender.tab !== undefined) &&
-          (nextCommandQueryMap[sender.tab.id] !== "")) {
-        chrome.pageAction.show(sender.tab.id);
-      }
+      
       nextCommandQueryMap[sender.tab.id] = request;
+      // show "next" button
+      chrome.pageAction.show(sender.tab.id);
+      
       return false;
     }
 
@@ -49,7 +63,7 @@
 
   function injectedCallback(results) {
     // TODO handle results
-    console.log("got result back: " + results);
+    // console.log("got result back: " + results);
   }
 
   function runExecuter() { 
@@ -73,7 +87,7 @@
 
   // Called when the user clicks on the page action.
   chrome.pageAction.onClicked.addListener(function(tab) {
-    if (nextCommandQueryMap[tab.id] !== "")
+    if (nextCommandQueryMap[tab.id] !== undefined)
       runExecuter();
   });
 
