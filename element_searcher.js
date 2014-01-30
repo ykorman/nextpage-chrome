@@ -34,6 +34,7 @@
   selector["piratebay"]       = "a > img[alt=Next]";
   selector["imdb_search"]     = "div.leftright > div#right > span.pagination > a:nth-last-child(1)";
   selector["dabapps"]         = "a.btn > i.icon-arrow-right";
+  selector["gcs"]             = "div.gsc-cursor-current-page ~ div";
   
   // keep these always last
   // in some sites these move to the next article, and the
@@ -93,6 +94,8 @@
   }
   
   //============================================================================
+  
+  //console.log("checking page " + document.location.toString());
   
   register_for_changes();
   search_next();
