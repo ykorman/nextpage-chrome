@@ -76,6 +76,17 @@
     
     if (!found)
       chrome.runtime.sendMessage({type: "none"});
+    /*
+    if (found) {
+      console.log("registering keypress");
+      document.querySelector("body").addEventListener("keypress", function(event) {
+        if((e.keyCode == 39) && e.ctrlKey) {
+          console.log("got a keypress");
+          element.click();
+        }
+      }, true);
+    }
+    */
   }
   
   // register for changes in DOM
