@@ -39,38 +39,62 @@
   // in some sites these move to the next article, and the
   // more specific above move to next page (if exists)
   selector["html_rel_a"]      = "body a[rel~=next]";
-  selector["html_rel_link"]   = "body link[rel~=next]"; // really, link inside body?
+  selector["html_rel_link"]   = "body link[rel~=next]"; // really? link inside body?
   selector["html_rel_area"]   = "body area[rel~=next]";
-  
-  var found = false;
-  
-  // check for next link in head element
-  var head_next_link = document.querySelector("head link[rel~=next]");
-  if ((head_next_link !== null) &&
-      (head_next_link.href !== undefined)) {
-    found = true;
-    chrome.runtime.sendMessage({type: 'url', url: head_next_link.href});
-    return;
-  }
-  
-  for (site in selector) {
-    if (selector.hasOwnProperty(site)) {
-      var query_string = selector[site];
-      var element = document.querySelector(query_string);
-      if ((element !== null) &&
-          (element.click !== null )) {
-        // check that the url doesn't point to the current page
-        if ((element.href !== undefined) && 
-            (element.href === window.location.toString()))
-          continue;
-        found = true;
-        chrome.runtime.sendMessage({type: 'query', query: query_string});
-        break;
+
+  //============================================================================
+
+  function search_next() {
+    var found = false;
+    
+    // check for next link in head element
+    var head_next_link = document.querySelector("head link[rel~=next]");
+    if ((head_next_link !== null) &&
+        (head_next_link.href !== undefined)) {
+      found = true;
+      chrome.runtime.sendMessage({type: 'url', url: head_next_link.href});
+      return;
+    }
+    
+    for (site in selector) {
+      if (selector.hasOwnProperty(site)) {
+        var query_string = selector[site];
+        var element = document.querySelector(query_string);
+        if ((element !== null) &&
+            (element.click !== null )) {
+          // check that the url doesn't point to the current page
+          if ((element.href !== undefined) && 
+              (element.href === window.location.toString()))
+            continue;
+          found = true;
+          chrome.runtime.sendMessage({type: 'query', query: query_string});
+          break;
+        }
       }
     }
+    
+    if (!found)
+      chrome.runtime.sendMessage({type: "none"});
   }
   
-  if (!found)
-    chrome.runtime.sendMessage({type: "none"});
+  // register for changes in DOM
+  function register_for_changes() {
+    var target = document.querySelector("body");
+    
+    var observer = new MutationObserver(function(mutations) {
+      // we don't care which mutation happened, if something changed, just look
+      // for the next button again
+      search_next();
+    });
+    
+    var config = { childList: true, subtree: true };
+    
+    observer.observe(target, config);
+  }
+  
+  //============================================================================
+  
+  register_for_changes();
+  search_next();
   
 })();  // namespace protection end
