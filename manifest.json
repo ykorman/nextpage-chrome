@@ -1,7 +1,7 @@
 {
   "name": "Quicken",
   "description": "Surf faster than your mouse can handle",
-  "version": "1.11",
+  "version": "1.12",
   "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "activeTab",
@@ -39,7 +39,7 @@
         "https://*/*"
       ],
       "js" : ["element_searcher.js"],
-      "run_at" : "document_idle",
+      "run_at" : "document_end",
       "all_frames" : false
     }
   ],
