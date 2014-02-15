@@ -44,32 +44,56 @@
   selector["html_rel_area"]   = "body area[rel~=next]";
 
   //============================================================================
-
-  function search_next() {
-    var found = false;
-    
+  function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
     if ((head_next_link !== null) &&
         (head_next_link.href !== undefined)) {
-      found = true;
       chrome.runtime.sendMessage({type: 'url', url: head_next_link.href});
+      return true;
+    }
+    return false;
+  }
+  //============================================================================
+  function check_click_element(element, query_string) {
+    if (element.click === null)
+      return true;
+      
+    chrome.runtime.sendMessage({type: 'query', query: query_string});
+    return true;
+  }
+  //============================================================================
+  function check_href_element(element) {
+    if (element.href === undefined)
+      return false;
+      
+    // check that the url doesn't point to the current page
+    if (element.href === window.location.toString())
+      return false;
+      
+    chrome.runtime.sendMessage({type: 'url', url: element.href});
+    return true;
+      
+  }
+  //============================================================================
+
+  function search_next() {
+    var found = false;
+    
+    if (search_next_special()) {
       return;
     }
-    
+
     for (site in selector) {
       if (selector.hasOwnProperty(site)) {
         var query_string = selector[site];
         var element = document.querySelector(query_string);
-        if ((element !== null) &&
-            (element.click !== null )) {
-          // check that the url doesn't point to the current page
-          if ((element.href !== undefined) && 
-              (element.href === window.location.toString()))
-            continue;
-          found = true;
-          chrome.runtime.sendMessage({type: 'query', query: query_string});
-          break;
+        if (element !== null) {
+          if ((check_href_element(element)) ||
+              (check_click_element(element, query_string))) {
+            found = true;
+            break;
+          }
         }
       }
     }
