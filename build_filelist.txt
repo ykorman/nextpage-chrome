@@ -1,4 +1,5 @@
 quicken2.png
+quicken2_Clicked.png
 background.js
 element_searcher.js
 executer.js

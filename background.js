@@ -87,8 +87,9 @@
 
   // Called when the user clicks on the page action.
   chrome.pageAction.onClicked.addListener(function(tab) {
-    if (nextCommandQueryMap[tab.id] !== undefined)
-      runExecuter();
+    // debug icon change to see that the click is actually done
+    chrome.pageAction.setIcon({path:"Quicken2_Clicked.png", tabId: tab.id});
+    runExecuter();
   });
 
 })(); // namespace protection end

@@ -1,5 +1,10 @@
 (function () {   // namespace protection
   function executer(request) {
+    if (request === undefined) {
+      console.log("got bad request");
+      return;
+    }
+    
     console.log("executer: got request " + request.type);
     if (request.type === "url") {
       console.log("moving to url " + request.url);
