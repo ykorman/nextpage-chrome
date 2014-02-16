@@ -35,8 +35,7 @@
   "content_scripts" : [
     {
       "matches" : [
-        "http://*/*",
-        "https://*/*"
+        "*://*/*"
       ],
       "js" : ["element_searcher.js"],
       "run_at" : "document_end",
