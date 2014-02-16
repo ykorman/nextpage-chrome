@@ -44,6 +44,7 @@
   selector["html_rel_area"]   = "body area[rel~=next]";
 
   //============================================================================
+ 
   function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
@@ -54,7 +55,9 @@
     }
     return false;
   }
+  
   //============================================================================
+  
   function check_click_element(element, query_string) {
     if (element.click === null)
       return true;
@@ -62,7 +65,9 @@
     chrome.runtime.sendMessage({type: 'query', query: query_string});
     return true;
   }
+
   //============================================================================
+ 
   function check_href_element(element) {
     if (element.href === undefined)
       return false;
@@ -75,6 +80,7 @@
     return true;
       
   }
+
   //============================================================================
 
   function search_next() {
@@ -113,6 +119,8 @@
     */
   }
   
+  //============================================================================
+    
   // register for changes in DOM
   function register_for_changes() {
     var target = document.querySelector("body");
