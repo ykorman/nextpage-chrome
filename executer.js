@@ -6,7 +6,8 @@
     }
     
     if (request.page !== document.location.href) {
-      console.log("got request for another page");
+      console.log("got request for another page, request for " + request.page +
+        " versus my page " + document.location.href);
       return;
     }
     

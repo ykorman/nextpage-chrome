@@ -50,7 +50,8 @@
     var head_next_link = document.querySelector("head link[rel~=next]");
     if ((head_next_link !== null) &&
         (head_next_link.href !== undefined)) {
-      chrome.runtime.sendMessage({type: 'url', url: head_next_link.href});
+      chrome.runtime.sendMessage(
+        {type: 'url', url: head_next_link.href, page: document.location.href});
       return true;
     }
     return false;
