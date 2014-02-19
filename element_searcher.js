@@ -62,7 +62,8 @@
     if (element.click === null)
       return true;
       
-    chrome.runtime.sendMessage({type: 'query', query: query_string});
+    chrome.runtime.sendMessage(
+      {type: 'query', query: query_string, page: document.location.href});
     return true;
   }
 
@@ -76,7 +77,8 @@
     if (element.href === window.location.toString())
       return false;
       
-    chrome.runtime.sendMessage({type: 'url', url: element.href});
+    chrome.runtime.sendMessage(
+      {type: 'url', url: element.href, page: document.location.href});
     return true;
       
   }
@@ -105,7 +107,9 @@
     }
     
     if (!found)
-      chrome.runtime.sendMessage({type: "none"});
+      chrome.runtime.sendMessage(
+        {type: "none", page: document.location.href});
+
     /*
     if (found) {
       console.log("registering keypress");
@@ -135,11 +139,12 @@
     
     observer.observe(target, config);
   }
-  
+
   //============================================================================
-  
-  //console.log("checking page " + document.location.toString());
-  
+    
+  // support top window only
+  if (window !== top) return;
+
   register_for_changes();
   search_next();
   

@@ -5,7 +5,9 @@
   "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "activeTab",
-    "tabs"
+    "tabs",
+    "webNavigation",
+    "*://*/*"
   ],
   "icons": {
     "512": "Quicken2.png"
@@ -39,7 +41,7 @@
       ],
       "js" : ["element_searcher.js"],
       "run_at" : "document_end",
-      "all_frames" : false
+      "all_frames" : true
     }
   ],
   "manifest_version": 2
