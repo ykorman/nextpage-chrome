@@ -1,5 +1,6 @@
 (function () {   // namespace protection
 
+  //============================================================================
   var selector = {};
   
   selector["google_search"]   = "#pnnext";
@@ -35,6 +36,7 @@
   selector["imdb_search"]     = "div.leftright > div#right > span.pagination > a:nth-last-child(1)";
   selector["dabapps"]         = "a.btn > i.icon-arrow-right";
   selector["gcs"]             = "div.gsc-cursor-current-page ~ div";
+  selector["yandex"]          = "a.b-pager__next";
   
   // keep these always last
   // in some sites these move to the next article, and the
@@ -44,14 +46,17 @@
   selector["html_rel_area"]   = "body area[rel~=next]";
 
   //============================================================================
+  
+  var next = {};
+  
+  //============================================================================
  
   function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
     if ((head_next_link !== null) &&
         (head_next_link.href !== undefined)) {
-      chrome.runtime.sendMessage(
-        {type: 'url', url: head_next_link.href, page: document.location.href});
+      next = {type: 'url', url: head_next_link.href};
       return true;
     }
     return false;
@@ -63,8 +68,7 @@
     if (element.click === null)
       return true;
       
-    chrome.runtime.sendMessage(
-      {type: 'query', query: query_string, page: document.location.href});
+    next = {type: 'query', query: query_string};
     return true;
   }
 
@@ -78,8 +82,7 @@
     if (element.href === window.location.toString())
       return false;
       
-    chrome.runtime.sendMessage(
-      {type: 'url', url: element.href, page: document.location.href});
+    next = {type: 'url', url: element.href};
     return true;
       
   }
@@ -87,10 +90,9 @@
   //============================================================================
 
   function search_next() {
-    var found = false;
     
     if (search_next_special()) {
-      return;
+      return true;
     }
 
     for (site in selector) {
@@ -100,17 +102,14 @@
         if (element !== null) {
           if ((check_href_element(element)) ||
               (check_click_element(element, query_string))) {
-            found = true;
-            break;
+            return true;
           }
         }
       }
     }
     
-    if (!found)
-      chrome.runtime.sendMessage(
-        {type: "none", page: document.location.href});
-
+    return false;
+    
     /*
     if (found) {
       console.log("registering keypress");
@@ -142,11 +141,31 @@
   }
 
   //============================================================================
-    
-  // support top window only
-  if (window !== top) return;
+
+  // register for message from background about execution
+  function register_for_execution() {
+    // register for notification from background script
+    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
+      console.log("got message " + JSON.stringify(message));
+      if (next.type === "url") {
+        console.log("moving to url " + next.url);
+        window.location = next.url;
+      } else if (next.type === "query") {
+        element = document.querySelector(next.query);
+        if ((element !== undefined) && (element.click !== undefined)) {
+          console.log("found clickable element, clicking...");
+          element.click();
+        }
+      }
+    });
+    // notify background script that it can show the "next" button
+    chrome.runtime.sendMessage(true);
+  }
+
+  //============================================================================
 
   register_for_changes();
-  search_next();
-  
+  if (search_next())
+    register_for_execution();
+
 })();  // namespace protection end

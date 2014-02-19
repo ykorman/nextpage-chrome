@@ -6,7 +6,6 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "webNavigation",
     "*://*/*"
   ],
   "icons": {
@@ -40,8 +39,8 @@
         "*://*/*"
       ],
       "js" : ["element_searcher.js"],
-      "run_at" : "document_end",
-      "all_frames" : true
+      "run_at" : "document_idle",
+      "all_frames" : false
     }
   ],
   "manifest_version": 2
