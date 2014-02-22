@@ -3,7 +3,7 @@
   //============================================================================
   var selector = {};
   
-  selector["google_search"]   = "#pnnext";
+  selector["google_search"]   = "a#pnnext";
   selector["arstechnica"]     = "span.next";
   selector["pcmag"]           = "a.next-btn";
   selector["blogspot"]        = "a.blog-pager-older-link";
@@ -132,7 +132,8 @@
     var observer = new MutationObserver(function(mutations) {
       // we don't care which mutation happened, if something changed, just look
       // for the next button again
-      search_next();
+      if (search_next())
+        register_for_execution();
     });
     
     var config = { childList: true, subtree: true };
