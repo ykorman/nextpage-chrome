@@ -1,5 +1,7 @@
-quicken2.png
-quicken2_Clicked.png
 background.js
 element_searcher.js
 manifest.json
+icon128.png
+icon19.png
+icon19_click.png
+icon38.png
