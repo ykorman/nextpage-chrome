@@ -37,6 +37,7 @@
   selector["dabapps"]         = "a.btn > i.icon-arrow-right";
   selector["gcs"]             = "div.gsc-cursor-current-page ~ div";
   selector["yandex"]          = "a.b-pager__next";
+  selector["geektime"]        = "div.next-page > a";
   
   // keep these always last
   // in some sites these move to the next article, and the
