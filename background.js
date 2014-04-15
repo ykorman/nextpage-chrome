@@ -15,5 +15,31 @@
     chrome.pageAction.setIcon({path:"icon19_click.png", tabId: tab.id});
     chrome.tabs.sendMessage(tab.id, true);
   });
+  
+  // create a basic context menu onClick handler
+  function basicOnClick(info, tab) {
+      console.log("info: " + JSON.stringify(info));
+      console.log("tab: " + JSON.stringify(tab));
+  }
+  
+  function basicOnCreate() {
+      if (chrome.runtime.lastError)
+        console.log("Error creating context menu: " + 
+          JSON.stringify(chrome.runtime.lastErr.message));
+  }
+  
+  chrome.contextMenus.onClicked.addListener(basicOnClick);
+  
+  // Set up context menu tree at install time.
+  chrome.runtime.onInstalled.addListener(function() {
+    chrome.contextMenus.create(
+      { "title": "Quicken Link",
+        "type": "normal",
+        "id": "quicken1",
+        "contexts": ["all"]
+      },
+      basicOnCreate    
+    );
+  });
 
 })(); // namespace protection end
