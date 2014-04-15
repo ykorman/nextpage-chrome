@@ -38,6 +38,8 @@
   selector["gcs"]             = "div.gsc-cursor-current-page ~ div";
   selector["yandex"]          = "a.b-pager__next";
   selector["geektime"]        = "div.next-page > a";
+  selector["crn"]             = "li.pager-next > a";
+  selector["theverge"]        = "li.next > a";
   
   // keep these always last
   // in some sites these move to the next article, and the
