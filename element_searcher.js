@@ -177,6 +177,38 @@
   }
 
   //============================================================================
+  
+  var contextElement = null;
+  
+  function getPathTo(element) {
+    if (element.id!=='')
+      return 'id("'+element.id+'")';
+    if (element===document.body)
+      return element.tagName;
+    
+    var ix= 0;
+    var siblings= element.parentNode.childNodes;
+    for (var i= 0; i<siblings.length; i++) {
+      var sibling= siblings[i];
+      if (sibling===element)
+        return getPathTo(element.parentNode)+'/'+element.tagName+'['+(ix+1)+']';
+      if (sibling.nodeType===1 && sibling.tagName===element.tagName)
+        ix++;
+    }
+  }
+  
+  function getElementByXpath(path) {
+    return document.evaluate(path, document, null, 
+      XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  }
+  
+  document.addEventListener("contextmenu", function(event) {
+    contextElement = event.target;
+    contextElement.style.backgroundColor = "#FDFF47";
+    console.log(getPathTo(contextElement));
+  });
+  
+  //============================================================================
 
   register_for_changes();
   if (search_next())
