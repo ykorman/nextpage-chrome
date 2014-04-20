@@ -53,7 +53,10 @@
   var next = {};
   
   //============================================================================
+   
+  var context_element = null;
  
+ //============================================================================
   function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
@@ -160,27 +163,10 @@
     Mousetrap.bind('mod+right', handle_next_request);
     Mousetrap.bind('mod+left', handle_prev_request);
   }
-
-  //============================================================================
-
-  // register for message from background about execution
-  function register_for_execution() {
-    // register keyboard shortcuts
-    register_keyboard_shortcuts();
-    // register for notification from background script (icon click)
-    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
-      console.log("got message " + JSON.stringify(message));
-      handle_next_request(undefined);
-    });
-    // notify background script that it can show the "next" button
-    chrome.runtime.sendMessage(true);
-  }
-
+  
   //============================================================================
   
-  var contextElement = null;
-  
-  function getPathTo(element) {
+  function get_element_xpath(element) {
     if (element.id!=='')
       return 'id("'+element.id+'")';
     if (element===document.body)
@@ -191,22 +177,93 @@
     for (var i= 0; i<siblings.length; i++) {
       var sibling= siblings[i];
       if (sibling===element)
-        return getPathTo(element.parentNode)+'/'+element.tagName+'['+(ix+1)+']';
+        return get_element_xpath(element.parentNode)+
+          '/'+element.tagName+'['+(ix+1)+']';
       if (sibling.nodeType===1 && sibling.tagName===element.tagName)
         ix++;
     }
   }
+  
+  //============================================================================
+
+  function handle_xpath_record() {
+    // check to see if we recorded an element which the context menu was
+    // clicked on (if not, probably another iframe will handle this)
+    if (context_element === null)
+      return;
+      
+    // find xpath of element
+    var xpath = get_element_xpath(context_element);
+    
+    // check we get an element from the xpath
+    var found_element = get_element_by_xpath(xpath);
+    
+    if (context_element !== found_element)
+      return;
+      
+  }
+
+  //============================================================================
+  
+  function handle_messages_from_background(message) {
+    switch (message) {
+      case 'next_button_click':
+        handle_next_request();
+        break;
+      case 'xpath_record':
+        handle_xpath_record();
+        break;
+      default:
+        console.log("Got unknown message from background: " + 
+          JSON.stringify(message));
+    }
+  }
+
+  //============================================================================
+  
+  // register for message from background about execution
+  function register_for_execution() {
+    // register keyboard shortcuts
+    register_keyboard_shortcuts();
+    // register for notification from background script (icon click)
+    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
+      handle_messages_from_background(message);
+    });
+    // notify background script that it can show the "next" button
+    chrome.runtime.sendMessage(true);
+  }
+
+  //============================================================================
+  
+  var contextElement = null;
   
   function getElementByXpath(path) {
     return document.evaluate(path, document, null, 
       XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
   }
   
+  /*
   document.addEventListener("contextmenu", function(event) {
     contextElement = event.target;
-    contextElement.style.backgroundColor = "#FDFF47";
+    //contextElement.style.backgroundColor = "#FDFF47";
     console.log(getPathTo(contextElement));
   });
+  */
+  
+  //============================================================================
+  
+  // this only saves the element the context menu was opened on
+  function register_for_context_events() {
+    document.addEventListener("contextmenu", function(event) {
+      context_element = event.target;
+    });
+  }
+  
+  //============================================================================
+  
+  function store_xpath() {
+    
+  }
   
   //============================================================================
 

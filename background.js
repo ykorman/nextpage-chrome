@@ -13,13 +13,15 @@
   chrome.pageAction.onClicked.addListener(function(tab) {
     // debug icon change to see that the click is actually done
     chrome.pageAction.setIcon({path:"icon19_click.png", tabId: tab.id});
-    chrome.tabs.sendMessage(tab.id, true);
+    chrome.tabs.sendMessage(tab.id, 'next_button_click');
   });
   
-  // create a basic context menu onClick handler
-  function basicOnClick(info, tab) {
-      console.log("info: " + JSON.stringify(info));
-      console.log("tab: " + JSON.stringify(tab));
+  // handle clicking of context menu
+  function handleContextOnClick(info, tab) {
+    console.log("Got Info: " + JSON.stringify(info));
+    console.log("Got Tab: " + JSON.stringify(tab));
+    // only one menu item, so just send message to page action
+    chrome.tabs.sendMessage(tab.id, 'xpath_record');
   }
   
   function basicOnCreate() {
@@ -28,17 +30,17 @@
           JSON.stringify(chrome.runtime.lastErr.message));
   }
   
-  chrome.contextMenus.onClicked.addListener(basicOnClick);
+  chrome.contextMenus.onClicked.addListener(handleContextOnClick);
   
   // Set up context menu tree at install time.
   chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create(
-      { "title": "Quicken Link",
+      { "title": "Set as Quicken Next",
         "type": "normal",
         "id": "quicken1",
         "contexts": ["all"]
       },
-      basicOnCreate    
+      basicOnCreate
     );
   });
 
