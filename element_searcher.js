@@ -56,7 +56,8 @@
    
   var context_element = null;
  
- //============================================================================
+  //============================================================================
+  
   function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
@@ -68,6 +69,15 @@
     return false;
   }
   
+  //============================================================================
+  
+  function search_xpath_element() {
+    var domain_key = window.location.hostname;
+    chrome.storage.sync.get(domain_key, function(items) {
+      //
+    });
+  }
+ 
   //============================================================================
   
   function check_click_element(element, query_string) {
@@ -200,6 +210,13 @@
     
     if (context_element !== found_element)
       return;
+
+    // store information
+    domain_key = window.location.hostname;
+    chrome.storage.sync.set({domain_key: xpath});
+
+    // report that a next button exists
+    chrome.runtime.sendMessage(true);
       
   }
 

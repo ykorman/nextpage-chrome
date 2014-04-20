@@ -6,7 +6,8 @@
   "permissions": [
     "tabs",
     "*://*/*",
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
   "icons": {
     "128": "icon128.png"
