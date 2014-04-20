@@ -1,5 +1,7 @@
 # nextpage-chrome
 
+Google webstore link: https://chrome.google.com/webstore/detail/quicken/bcnfaiaknkbbcmpeedkjjjcdmjlgbafo
+
 ## Tagline: Quicken - Surf faster than your mouse can handle
 
 A Google Chrome extension giving quick access to the 'next page' button in 
