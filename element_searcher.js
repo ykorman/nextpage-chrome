@@ -98,7 +98,7 @@
       return true;
     }
 
-    for (site in selector) {
+    for (var site in selector) {
       if (selector.hasOwnProperty(site)) {
         var query_string = selector[site];
         var element = document.querySelector(query_string);
@@ -112,18 +112,7 @@
     }
     
     return false;
-    
-    /*
-    if (found) {
-      console.log("registering keypress");
-      document.querySelector("body").addEventListener("keypress", function(event) {
-        if((e.keyCode == 39) && e.ctrlKey) {
-          console.log("got a keypress");
-          element.click();
-        }
-      }, true);
-    }
-    */
+
   }
   
   //============================================================================
@@ -146,21 +135,42 @@
 
   //============================================================================
 
+  function handle_prev_request(event, combi) {
+    history.back();
+  }
+
+  //============================================================================
+
+  function handle_next_request(event, combi) {
+    if (next.type === "url") {
+      console.log("moving to url " + next.url);
+      window.location = next.url;
+    } else if (next.type === "query") {
+      var element = document.querySelector(next.query);
+      if ((element !== undefined) && (element.click !== undefined)) {
+        console.log("found clickable element, clicking...");
+        element.click();
+      }
+    }
+  }
+
+  //============================================================================
+
+  function register_keyboard_shortcuts() {
+    Mousetrap.bind('mod+right', handle_next_request);
+    Mousetrap.bind('mod+left', handle_prev_request);
+  }
+
+  //============================================================================
+
   // register for message from background about execution
   function register_for_execution() {
-    // register for notification from background script
+    // register keyboard shortcuts
+    register_keyboard_shortcuts();
+    // register for notification from background script (icon click)
     chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
       console.log("got message " + JSON.stringify(message));
-      if (next.type === "url") {
-        console.log("moving to url " + next.url);
-        window.location = next.url;
-      } else if (next.type === "query") {
-        element = document.querySelector(next.query);
-        if ((element !== undefined) && (element.click !== undefined)) {
-          console.log("found clickable element, clicking...");
-          element.click();
-        }
-      }
+      handle_next_request(undefined);
     });
     // notify background script that it can show the "next" button
     chrome.runtime.sendMessage(true);

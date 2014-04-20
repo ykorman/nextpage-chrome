@@ -1,5 +1,6 @@
 background.js
 element_searcher.js
+mousetrap.min.js
 manifest.json
 icon128.png
 icon19.png
