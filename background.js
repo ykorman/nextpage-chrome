@@ -2,7 +2,7 @@
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
-    console.log("got request: " + JSON.stringify(request));
+    console.log("background got request: " + JSON.stringify(request));
 
     if (request === true)
       chrome.pageAction.show(sender.tab.id);
@@ -16,11 +16,23 @@
     chrome.tabs.sendMessage(tab.id, 'next_button_click');
   });
   
+  function debug_print(items) {
+    console.log(JSON.stringify(items));
+  }
+  
   // handle clicking of context menu
   function handleContextOnClick(info, tab) {
-    console.log("Got Info: " + JSON.stringify(info));
-    console.log("Got Tab: " + JSON.stringify(tab));
+    
+    if (info.menuItemId === "quicken_debug") {
+      chrome.storage.sync.get(null, debug_print);
+      return;
+    }
+    
+    //console.log("Got Info: " + JSON.stringify(info));
+    //console.log("Got Tab: " + JSON.stringify(tab));
+    
     // only one menu item, so just send message to page action
+    console.log("Sending xpath_record to script on tab " + tab.id);
     chrome.tabs.sendMessage(tab.id, 'xpath_record');
   }
   
@@ -42,6 +54,15 @@
       },
       basicOnCreate
     );
+    /*
+    chrome.contextMenus.create(
+      { "title": "Quicken Debug",
+        "type": "normal",
+        "id": "quicken_debug",
+        "contexts": ["all"]
+      }
+    );
+    */
   });
 
 })(); // namespace protection end
