@@ -5,7 +5,9 @@
   "short_name": "Accelerate Keyboard Browsing",
   "permissions": [
     "tabs",
-    "*://*/*"
+    "*://*/*",
+    "contextMenus",
+    "storage"
   ],
   "icons": {
     "128": "icon128.png"

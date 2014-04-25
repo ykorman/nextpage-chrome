@@ -53,13 +53,23 @@
   var next = {};
   
   //============================================================================
+   
+  var context_element = null;
  
+  //============================================================================
+  
+  function mark_next_button_found() {
+    register_for_execution();
+  }
+  
+  //============================================================================
+  
   function search_next_special() {
     // check for next link in head element
     var head_next_link = document.querySelector("head link[rel~=next]");
     if ((head_next_link !== null) &&
         (head_next_link.href !== undefined)) {
-      next = {type: 'url', url: head_next_link.href};
+      next = {'type': 'url', 'url': head_next_link.href};
       return true;
     }
     return false;
@@ -67,17 +77,45 @@
   
   //============================================================================
   
+  function retreive_xpath(item) {
+    
+    // extract xpath from the item
+    var domain_key = window.location.hostname;
+    var xpath = item[domain_key];
+    
+    if ((xpath !== undefined) && 
+        (get_element_by_xpath(xpath) !== null)) {
+      next = {'type': 'xpath', 'xpath': xpath};
+      mark_next_button_found();
+    } else {
+      search_next_manual();        
+    }
+    
+  }
+  
+  //============================================================================
+  
+  function search_xpath_element() {
+    var domain_key = window.location.hostname;
+    chrome.storage.sync.get(domain_key, retreive_xpath);
+  }
+ 
+  //============================================================================
+  
   function check_click_element(element, query_string) {
+    
     if (element.click === null)
       return true;
       
-    next = {type: 'query', query: query_string};
+    next = {'type': 'query', 'query': query_string};
     return true;
+    
   }
 
   //============================================================================
  
   function check_href_element(element) {
+    
     if (element.href === undefined)
       return false;
       
@@ -91,13 +129,14 @@
   }
 
   //============================================================================
-
-  function search_next() {
-    
+  
+  function search_next_manual() {
+        
     if (search_next_special()) {
-      return true;
+      mark_next_button_found();
+      return;
     }
-
+    
     for (var site in selector) {
       if (selector.hasOwnProperty(site)) {
         var query_string = selector[site];
@@ -105,13 +144,22 @@
         if (element !== null) {
           if ((check_href_element(element)) ||
               (check_click_element(element, query_string))) {
-            return true;
+            mark_next_button_found();
+            return;
           }
         }
       }
     }
-    
-    return false;
+
+  }
+
+  //============================================================================
+
+  function search_next() {
+
+    // search for recorded xpath element first, if not found, the manual
+    // search will be triggered by the callback
+    search_xpath_element();    
 
   }
   
@@ -124,8 +172,7 @@
     var observer = new MutationObserver(function(mutations) {
       // we don't care which mutation happened, if something changed, just look
       // for the next button again
-      if (search_next())
-        register_for_execution();
+      search_next();
     });
     
     var config = { childList: true, subtree: true };
@@ -142,16 +189,29 @@
   //============================================================================
 
   function handle_next_request(event, combi) {
-    if (next.type === "url") {
+
+    switch (next.type) {
+    case "url":
       console.log("moving to url " + next.url);
       window.location = next.url;
-    } else if (next.type === "query") {
-      var element = document.querySelector(next.query);
+      break;
+    case "query":
+    case "xpath":
+      var element;
+      if (next.type === "query")
+        element = document.querySelector(next.query);
+      else if (next.type === "xpath")
+        element = get_element_by_xpath(next.xpath);
       if ((element !== undefined) && (element.click !== undefined)) {
         console.log("found clickable element, clicking...");
         element.click();
       }
+      break;
+    default:
+      console.log("Got bad next button type.");
+      break;
     }
+    
   }
 
   //============================================================================
@@ -160,26 +220,128 @@
     Mousetrap.bind('mod+right', handle_next_request);
     Mousetrap.bind('mod+left', handle_prev_request);
   }
+  
+  //============================================================================
+  
+  function get_element_xpath(element) {
+    if (element.id!=='')
+      return 'id("'+element.id+'")';
+    if (element===document.body)
+      return element.tagName;
+    
+    var ix= 0;
+    var siblings= element.parentNode.childNodes;
+    for (var i= 0; i<siblings.length; i++) {
+      var sibling= siblings[i];
+      if (sibling===element)
+        return get_element_xpath(element.parentNode)+
+          '/'+element.tagName+'['+(ix+1)+']';
+      if (sibling.nodeType===1 && sibling.tagName===element.tagName)
+        ix++;
+    }
+  }
+  
+  //============================================================================
+  
+  function get_element_by_xpath(path) {
+    return document.evaluate(path, document, null, 
+      XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  }
 
   //============================================================================
 
+  function storage_set_callback() {
+    var last_error = chrome.runtime.lastError;
+    if (last_error)
+      console.log(JSON.stringify(last_error.message));
+  }
+  
+  function handle_xpath_record() {
+    // check to see if we recorded an element which the context menu was
+    // clicked on (if not, probably another iframe will handle this)
+    if (context_element === null) {
+      console.log("XPath record requested but no context element exists.");
+      return;
+    }
+      
+    // find xpath of element
+    var xpath = get_element_xpath(context_element);
+    
+    // check we get an element from the xpath
+    var found_element = get_element_by_xpath(xpath);
+    
+    if (context_element !== found_element) {
+      console.log("The requested element and the found element don't match.");
+      return;
+    }
+    
+    console.log("XPath element found. Storing and enabling next.");
+
+    // store information
+    var domain_key = window.location.hostname;
+    var xpath_store = {};
+    xpath_store[domain_key] = xpath;
+    chrome.storage.sync.set(xpath_store, storage_set_callback);
+
+    // trigger next button search
+    search_next();
+    // report that a next button exists
+    chrome.runtime.sendMessage(true);
+      
+  }
+
+  //============================================================================
+  
+  function handle_messages_from_background(message) {
+    switch (message) {
+      case 'next_button_click':
+        console.log("Got next_button_click");
+        handle_next_request();
+        break;
+      case 'xpath_record':
+        console.log("Got xpath_record");
+        handle_xpath_record();
+        break;
+      default:
+        console.log("Got unknown message from background: " + 
+          JSON.stringify(message));
+    }
+  }
+
+  //============================================================================
+  
+  function register_for_background_messages() {
+    // register for notification from background script
+    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
+      handle_messages_from_background(message);
+    });
+  }
+  
+  //============================================================================
+  
   // register for message from background about execution
   function register_for_execution() {
     // register keyboard shortcuts
     register_keyboard_shortcuts();
-    // register for notification from background script (icon click)
-    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse) {
-      console.log("got message " + JSON.stringify(message));
-      handle_next_request(undefined);
-    });
+
     // notify background script that it can show the "next" button
     chrome.runtime.sendMessage(true);
   }
 
   //============================================================================
+  
+  // this only saves the element the context menu was opened on
+  function register_for_context_events() {
+    document.addEventListener("contextmenu", function(event) {
+      context_element = event.target;
+    });
+  }
+  
+  //============================================================================
 
+  register_for_context_events();
   register_for_changes();
-  if (search_next())
-    register_for_execution();
+  register_for_background_messages();
+  search_next();
 
 })();  // namespace protection end
