@@ -1,6 +1,8 @@
 background.js
 element_searcher.js
 mousetrap.min.js
+humane.min.js
+libnotify.css
 manifest.json
 icon128.png
 icon19.png

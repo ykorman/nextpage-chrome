@@ -28,8 +28,10 @@
       "matches" : [
         "*://*/*"
       ],
-      "js" : ["mousetrap.min.js",
+      "js" : ["humane.min.js",
+              "mousetrap.min.js",
               "element_searcher.js"],
+      "css" : ["libnotify.css"],
       "run_at" : "document_idle",
       "all_frames" : false
     }

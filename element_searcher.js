@@ -1,6 +1,7 @@
 (function () {   // namespace protection
 
   //============================================================================
+
   var selector = {};
   
   selector["google_search"]   = "a#pnnext";
@@ -50,10 +51,14 @@
 
   //============================================================================
   
-  var next = {};
+  //setup humane notifications
+  humane.info = humane.spawn({ addnCls: 'humane-libnotify-info' });
+  humane.error = humane.spawn({ addnCls: 'humane-libnotify-error' });
   
   //============================================================================
-   
+  
+  // local "globals"
+  var next = {};
   var context_element = null;
  
   //============================================================================
@@ -261,6 +266,7 @@
     // clicked on (if not, probably another iframe will handle this)
     if (context_element === null) {
       console.log("XPath record requested but no context element exists.");
+      humane.error("Quicken: Requested element not found.");
       return;
     }
       
@@ -272,10 +278,12 @@
     
     if (context_element !== found_element) {
       console.log("The requested element and the found element don't match.");
+      humane.error("Quicken: Requested element is not unique.");
       return;
     }
     
     console.log("XPath element found. Storing and enabling next.");
+    humane.info("Quicken: Element successfully saved.");
 
     // store information
     var domain_key = window.location.hostname;
